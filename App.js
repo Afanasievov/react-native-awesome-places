@@ -15,35 +15,35 @@ Navigation.registerComponent(
   'awesome-places.AuthScreen',
   () => AuthScreen,
   store,
-  Provider
+  Provider,
 );
 Navigation.registerComponent(
   'awesome-places.SharePlaceScreen',
   () => SharePlaceScreen,
   store,
-  Provider
+  Provider,
 );
 Navigation.registerComponent(
   'awesome-places.FindPlaceScreen',
   () => FindPlaceScreen,
   store,
-  Provider
+  Provider,
 );
 Navigation.registerComponent(
   'awesome-places.PlaceDetailScreen',
   () => PlaceDetailScreen,
   store,
-  Provider
+  Provider,
 );
 Navigation.registerComponent(
   'awesome-places.SideDrawer',
-  () => SideDrawer
+  () => SideDrawer,
 );
 
 // Start an App
 Navigation.startSingleScreenApp({
   screen: {
     screen: 'awesome-places.AuthScreen',
-    title: 'Login'
-  }
+    title: 'Login',
+  },
 });
