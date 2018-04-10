@@ -12,6 +12,7 @@ import MainText from '../../components/UI/MainText/MainText';
 import ButtonWithBackground from '../../components/UI/ButtonWithBackground/ButtonWithBackground';
 import backgroundImage from '../../assets/Background.jpg';
 import styles from './Auth.styles';
+import validate from '../../utility/validation';
 
 class AuthScreen extends Component {
   state = {
@@ -21,7 +22,7 @@ class AuthScreen extends Component {
         value: '',
         valid: false,
         validationRules: {
-          isEmail: true,
+          email: true,
         },
       },
       password: {
@@ -38,7 +39,7 @@ class AuthScreen extends Component {
           equalTo: 'password',
         },
       },
-    }
+    },
   };
 
   constructor(props) {
@@ -61,12 +62,38 @@ class AuthScreen extends Component {
   };
 
   updateInputState = (key, value) => {
+    let connectedValue = {};
+    if (this.state.controls[key].validationRules.equalTo) {
+      const equalControl = this.state.controls[key].validationRules.equalTo;
+      const equalValue = this.state.controls[equalControl].value;
+      connectedValue = {
+        ...connectedValue,
+        equalTo: equalValue,
+      };
+    }
+    if (key === 'password') {
+      connectedValue = {
+        ...connectedValue,
+        equalTo: value,
+      };
+    }
     this.setState(prevState => ({
       controls: {
         ...prevState.controls,
+        confirmPassword: {
+          ...prevState.controls.confirmPassword,
+          valid: key === 'password'
+            ? validate(
+              prevState.controls.confirmPassword.value,
+              prevState.controls.confirmPassword.validationRules,
+              connectedValue,
+            )
+            : prevState.controls.confirmPassword.valid,
+        },
         [key]: {
           ...prevState.controls[key],
           value,
+          valid: validate(value, prevState.controls[key].validationRules, connectedValue),
         },
       },
     }));
@@ -93,7 +120,7 @@ class AuthScreen extends Component {
             <DefaultInput
               placeholder="Your E-Mail Address"
               style={styles.input}
-              value={this.state.controls.email}
+              value={this.state.controls.email.value}
               onChangeText={val => this.updateInputState('email', val)}
             />
             <View

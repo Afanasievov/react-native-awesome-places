@@ -57,12 +57,12 @@ class FindPlaceScreen extends Component {
             {
               scale: this.state.removeAnim.interpolate({
                 inputRange: [0, 1],
-                outputRange: [12, 1]
+                outputRange: [12, 1],
             }),
           },
           ],
         }}
-        >
+      >
         <TouchableOpacity onPress={this.placesSearchHandler} >
           <View style={styles.searchButton}>
             <Text style={styles.searchButtonText}>Find Places</Text>
