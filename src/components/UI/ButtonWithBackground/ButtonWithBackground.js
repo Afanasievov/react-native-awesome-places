@@ -15,7 +15,7 @@ const buttonWithBackground = (props) => {
       { backgroundColor: props.color },
       props.disabled ? styles.disabled : null]}
     >
-      <Text style={props.disabled ? styles.disabled: null}>
+      <Text style={props.disabled ? styles.disabled : null}>
         {props.children}
       </Text>
     </View>

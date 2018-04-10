@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   },
   disabledText: {
     color: '#aaa',
-  }
+  },
 });
 
 export default styles;
