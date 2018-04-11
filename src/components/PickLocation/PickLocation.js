@@ -16,7 +16,6 @@ class PickLocation extends Component {
         0.0122,
     },
     locationChosen: false,
-
   }
 
   pickLocationHandler = (event) => {
@@ -34,6 +33,10 @@ class PickLocation extends Component {
       },
       locationChosen: true,
     }));
+    this.props.onLocationPick({
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+    });
   }
 
   getLocationHandler = () => {
