@@ -8,7 +8,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "test": "jest",
-    "lint": "esw '{src,__tests__}/**/*.js' '*.js'",
+    "lint": "esw 'src/**/*.js' '*.js'",
     "lint-watch": "esw -w --changed src/**",
     "prettier": "prettier --write '{src,__tests__}/**/*.js' '*.js'",
     "clear": "rm ./node_modules/react-native/local-cli/core/__fixtures__/files/package.json"
