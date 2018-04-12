@@ -1,6 +1,8 @@
 import { TRY_AUTH } from './actionTypes';
 
-export const tryAuth = authData => ({
+export const tryAuth = (authData) => ({
   type: TRY_AUTH,
   authData,
 });
+
+export const unused = () => {};

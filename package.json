@@ -3,13 +3,18 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "precommit": "lint-staged",
     "start": "react-native start",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "test": "jest",
-    "lint": "esw src/**",
+    "lint": "esw '{src,__tests__}/**/*.js' '*.js'",
     "lint-watch": "esw -w --changed src/**",
+    "prettier": "prettier --write '{src,__tests__}/**/*.js' '*.js'",
     "clear": "rm ./node_modules/react-native/local-cli/core/__fixtures__/files/package.json"
+  },
+  "lint-staged": {
+    "*.js": ["prettier --write", "eslint --fix", "git add"]
   },
   "dependencies": {
     "prop-types": "^15.6.1",
@@ -29,13 +34,18 @@
     "babel-preset-airbnb": "^2.4.0",
     "babel-preset-react-native": "^4.0.0",
     "eslint": "^4.19.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.10.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
     "eslint-watch": "^3.1.4",
+    "husky": "^0.14.3",
     "jest": "22.4.3",
-    "react-test-renderer": "^16.3.0-alpha.1"
+    "lint-staged": "^7.0.4",
+    "react-test-renderer": "^16.3.0-alpha.1",
+    "prettier": "^1.12.0"
   },
   "jest": {
     "preset": "react-native"

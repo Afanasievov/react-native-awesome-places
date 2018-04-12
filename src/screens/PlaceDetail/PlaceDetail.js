@@ -1,11 +1,5 @@
 import React, { Component } from 'react';
-import {
-  View,
-  Image,
-  Text,
-  TouchableOpacity,
-  Platform,
-} from 'react-native';
+import { View, Image, Text, TouchableOpacity, Platform } from 'react-native';
 import { connect } from 'react-redux';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -21,10 +15,7 @@ class PlaceDetail extends Component {
     return (
       <View style={styles.container}>
         <View>
-          <Image
-            source={this.props.selectedPlace.image}
-            style={styles.placeImage}
-          />
+          <Image source={this.props.selectedPlace.image} style={styles.placeImage} />
           <Text style={styles.placeName}>{this.props.selectedPlace.name}</Text>
         </View>
         <View>
@@ -43,8 +34,8 @@ class PlaceDetail extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  onDeletePlace: key => dispatch(deletePlace(key)),
+const mapDispatchToProps = (dispatch) => ({
+  onDeletePlace: (key) => dispatch(deletePlace(key)),
 });
 
 export default connect(null, mapDispatchToProps)(PlaceDetail);

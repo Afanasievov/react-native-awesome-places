@@ -1,23 +1,17 @@
 import React from 'react';
-import {
-  TouchableOpacity,
-  TouchableNativeFeedback,
-  Text,
-  View,
-  Platform,
-} from 'react-native';
+import { TouchableOpacity, TouchableNativeFeedback, Text, View, Platform } from 'react-native';
 import styles from './ButtonWitBackground.styles';
 
 const buttonWithBackground = (props) => {
   const content = (
-    <View style={[
-      styles.button,
-      { backgroundColor: props.color },
-      props.disabled ? styles.disabled : null]}
+    <View
+      style={[
+        styles.button,
+        { backgroundColor: props.color },
+        props.disabled ? styles.disabled : null,
+      ]}
     >
-      <Text style={props.disabled ? styles.disabled : null}>
-        {props.children}
-      </Text>
+      <Text style={props.disabled ? styles.disabled : null}>{props.children}</Text>
     </View>
   );
 
@@ -25,17 +19,9 @@ const buttonWithBackground = (props) => {
     return content;
   }
   if (Platform.OS === 'android') {
-    return (
-      <TouchableNativeFeedback onPress={props.onPress}>
-        {content}
-      </TouchableNativeFeedback>
-    );
+    return <TouchableNativeFeedback onPress={props.onPress}>{content}</TouchableNativeFeedback>;
   }
-  return (
-    <TouchableOpacity onPress={props.onPress}>
-      {content}
-    </TouchableOpacity>
-  );
+  return <TouchableOpacity onPress={props.onPress}>{content}</TouchableOpacity>;
 };
 
 export default buttonWithBackground;

@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
-import {
-  View,
-  Button,
-  ScrollView,
-} from 'react-native';
+import { View, Button, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 
 import { addPlace } from '../../store/actions/index';
@@ -18,7 +14,7 @@ import validate from '../../utility/validation';
 class SharePlaceScreen extends Component {
   static navigatorStyle = {
     navBarButtonColor: 'orange',
-  }
+  };
 
   state = {
     controls: {
@@ -53,7 +49,7 @@ class SharePlaceScreen extends Component {
   };
 
   placeChangedHandler = (val) => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       controls: {
         ...prevState.controls,
         placeName: {
@@ -67,7 +63,7 @@ class SharePlaceScreen extends Component {
   };
 
   locationPickedHandler = (location) => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       controls: {
         ...prevState.controls,
         location: {
@@ -76,13 +72,10 @@ class SharePlaceScreen extends Component {
         },
       },
     }));
-  }
+  };
 
   placeAddedHandler = () => {
-    this.props.onAddPlace(
-      this.state.controls.placeName.value,
-      this.state.controls.location.value,
-    );
+    this.props.onAddPlace(this.state.controls.placeName.value, this.state.controls.location.value);
   };
 
   render() {
@@ -92,7 +85,7 @@ class SharePlaceScreen extends Component {
           <MainText>
             <HeadingText>Share a place with us!</HeadingText>
           </MainText>
-          <PickImage z/>
+          <PickImage />
           <PickLocation onLocationPick={this.locationPickedHandler} />
           <PlaceInput
             placeData={this.state.controls.placeName}
@@ -102,10 +95,7 @@ class SharePlaceScreen extends Component {
             <Button
               title="Share the Place!"
               onPress={this.placeAddedHandler}
-              disabled={
-                !this.state.controls.placeName.valid ||
-                !this.state.controls.location.valid
-              }
+              disabled={!this.state.controls.placeName.valid || !this.state.controls.location.valid}
             />
           </View>
         </View>
@@ -114,7 +104,7 @@ class SharePlaceScreen extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onAddPlace: (placeName, location) => dispatch(addPlace(placeName, location)),
 });
 

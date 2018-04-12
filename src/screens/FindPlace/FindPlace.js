@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Animated,
-} from 'react-native';
+import { View, Text, TouchableOpacity, Animated } from 'react-native';
 import { connect } from 'react-redux';
 
 import PlaceList from '../../components/PlaceList/PlaceList';
@@ -58,7 +53,7 @@ class FindPlaceScreen extends Component {
   };
 
   itemSelectedHandler = (key) => {
-    const selPlace = this.props.places.find(place => place.key === key);
+    const selPlace = this.props.places.find((place) => place.key === key);
     this.props.navigator.push({
       screen: 'awesome-places.PlaceDetailScreen',
       title: selPlace.name,
@@ -97,22 +92,15 @@ class FindPlaceScreen extends Component {
             opacity: this.state.placesAnim,
           }}
         >
-          <PlaceList
-            places={this.props.places}
-            onItemSelected={this.itemSelectedHandler}
-          />
+          <PlaceList places={this.props.places} onItemSelected={this.itemSelectedHandler} />
         </Animated.View>
       );
     }
-    return (
-      <View style={this.state.placesLoaded ? null : styles.buttonContainer}>
-        {content}
-      </View>
-    );
+    return <View style={this.state.placesLoaded ? null : styles.buttonContainer}>{content}</View>;
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   places: state.places.places,
 });
 

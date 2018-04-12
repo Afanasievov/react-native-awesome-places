@@ -4,11 +4,11 @@ import { FlatList } from 'react-native';
 import ListItem from '../ListItem/ListItem';
 import styles from './PlaceList.styles';
 
-const PlaceList = props => (
+const PlaceList = (props) => (
   <FlatList
     style={styles.listContainer}
     data={props.places}
-    renderItem={info => (
+    renderItem={(info) => (
       <ListItem
         placeName={info.item.name}
         placeImage={info.item.image}
