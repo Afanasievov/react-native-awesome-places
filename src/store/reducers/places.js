@@ -14,7 +14,7 @@ const reducer = (state = initialState, action) => {
           key: Math.random().toString(),
           name: action.placeName,
           image: {
-            uri: 'https://goo.gl/f8bT9j',
+            uri: action.image.uri,
           },
           location: action.location,
         }),
