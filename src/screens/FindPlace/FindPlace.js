@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import PlaceList from '../../components/PlaceList/PlaceList';
 import styles from './FindPlace.styles';
+import { getPlaces } from '../../store/actions';
 
 class FindPlaceScreen extends Component {
   static navigatorStyle = {
@@ -21,6 +22,9 @@ class FindPlaceScreen extends Component {
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
   }
 
+  componentDidMount() {
+    this.props.onLoadPlaces();
+  }
   onNavigatorEvent = (event) => {
     if (event.type === 'NavBarButtonPress') {
       if (event.id === 'sideDrawerToggle') {
@@ -104,4 +108,8 @@ const mapStateToProps = (state) => ({
   places: state.places.places,
 });
 
-export default connect(mapStateToProps)(FindPlaceScreen);
+const mapDispatchToProps = (dispatch) => ({
+  onLoadPlaces: () => dispatch(getPlaces()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(FindPlaceScreen);

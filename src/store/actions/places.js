@@ -1,4 +1,4 @@
-import { DELETE_PLACE } from './actionTypes';
+import { SET_PLACES } from './actionTypes';
 import { uiStartLoading, uiStoptLoading } from './index';
 
 export const addPlace = (placeName, location, image) => (dispatch) => {
@@ -11,6 +11,7 @@ export const addPlace = (placeName, location, image) => (dispatch) => {
   })
     .catch((err) => {
       console.log(`Error: ${err}`);
+      alert('Something went wrong, please try again!');
       dispatch(uiStoptLoading());
     })
     .then((res) => res.json())
@@ -27,6 +28,7 @@ export const addPlace = (placeName, location, image) => (dispatch) => {
     })
     .catch((err) => {
       console.log(`Error: ${err}`);
+      alert('Something went wrong, please try again!');
       dispatch(uiStoptLoading());
     })
     .then((res) => res.json())
@@ -36,7 +38,28 @@ export const addPlace = (placeName, location, image) => (dispatch) => {
     });
 };
 
-export const deletePlace = (key) => ({
-  type: DELETE_PLACE,
-  placeKey: key,
+export const setPlaces = (places) => ({
+  type: SET_PLACES,
+  places,
 });
+export const getPlaces = () => (dispatch) => {
+  fetch('https://awesome-places-a0a92.firebaseio.com/places.json')
+    .catch((err) => {
+      alert('Something went wrong, sorry :/');
+      console.log(`Error: ${err}`);
+    })
+    .then((res) => res.json())
+    .then((parsedRes) => {
+      const places = [];
+      Object.keys(parsedRes).forEach((key) => {
+        places.push({
+          ...parsedRes[key],
+          image: {
+            uri: parsedRes[key].image,
+          },
+          key,
+        });
+      });
+      dispatch(setPlaces(places));
+    });
+};
