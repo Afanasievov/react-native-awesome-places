@@ -1,13 +1,18 @@
 import { DELETE_PLACE } from './actionTypes';
+import { uiStartLoading, uiStoptLoading } from './index';
 
-export const addPlace = (placeName, location, image) => () => {
+export const addPlace = (placeName, location, image) => (dispatch) => {
+  dispatch(uiStartLoading());
   fetch('https://us-central1-awesome-places-a0a92.cloudfunctions.net/storeImage', {
     method: 'POST',
     body: JSON.stringify({
       image: image.base64,
     }),
   })
-    .catch((err) => console.log(`Error: ${err}`))
+    .catch((err) => {
+      console.log(`Error: ${err}`);
+      dispatch(uiStoptLoading());
+    })
     .then((res) => res.json())
     .then((parsedRes) => {
       const placeData = {
@@ -20,10 +25,14 @@ export const addPlace = (placeName, location, image) => () => {
         body: JSON.stringify(placeData),
       });
     })
-    .catch((err) => console.log(`Error: ${err}`))
+    .catch((err) => {
+      console.log(`Error: ${err}`);
+      dispatch(uiStoptLoading());
+    })
     .then((res) => res.json())
     .then((parsedRes) => {
       console.log('parsedRes: ', parsedRes);
+      dispatch(uiStoptLoading());
     });
 };
 

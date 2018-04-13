@@ -25,20 +25,20 @@ class AuthScreen extends Component {
     authMode: 'login',
     controls: {
       email: {
-        value: '',
-        valid: false,
+        value: 'test@mail.com', // TODO: reverse to default value after testing
+        valid: true, // TODO: reverse to default value after testing
         validationRules: {
           email: true,
         },
-        touched: false,
+        touched: true, // TODO: reverse to default value after testing
       },
       password: {
-        value: '',
-        valid: false,
+        value: 'asdfgh', // TODO: reverse to default value after testing
+        valid: true, // TODO: reverse to default value after testing
         validationRules: {
           minLength: 6,
         },
-        touched: false,
+        touched: true, // TODO: reverse to default value after testing
       },
       confirmPassword: {
         value: '',
