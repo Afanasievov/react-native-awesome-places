@@ -1,5 +1,11 @@
+import { AUTH_SET_TOKEN } from './actionTypes';
 import { uiStartLoading, uiStoptLoading } from './ui';
 import startMainTabs from '../../screens/MainTabs/startMainTabs';
+
+export const authSetToken = (token) => ({
+  type: AUTH_SET_TOKEN,
+  token,
+});
 
 export const tryAuth = (authData, authMode) => (dispatch) => {
   dispatch(uiStartLoading());
@@ -29,12 +35,11 @@ export const tryAuth = (authData, authMode) => (dispatch) => {
     .then((res) => res.json())
     .then((parsedRes) => {
       dispatch(uiStoptLoading());
-      if (parsedRes.error) {
+      if (!parsedRes.idToken) {
         alert('Authentication failed, please try again!');
       } else {
+        dispatch(authSetToken(parsedRes.idToken));
         startMainTabs();
       }
     });
 };
-
-export const unused = () => {}; // TODO: remove this export
