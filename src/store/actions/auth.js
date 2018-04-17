@@ -1,4 +1,9 @@
-export const authSignup = (authData) => () => {
+import { uiStartLoading, uiStoptLoading } from './ui';
+import startMainTabs from '../../screens/MainTabs/startMainTabs';
+
+export const authSignup = (authData) => (dispatch) => {
+  dispatch(uiStartLoading());
+
   fetch(
     'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyCkl7rV-ytzH025wy8vPiYZuJzmhhMcrjU',
     {
@@ -16,10 +21,16 @@ export const authSignup = (authData) => () => {
     .catch((err) => {
       console.log(`Error: ${err}`);
       alert('Authentication failed, please try again!');
+      dispatch(uiStoptLoading());
     })
     .then((res) => res.json())
-    .then((parseRes) => {
-      console.log('parseRes: ', parseRes);
+    .then((parsedRes) => {
+      dispatch(uiStoptLoading());
+      if (parsedRes.error) {
+        alert('Authentication failed, please try again!');
+      } else {
+        startMainTabs();
+      }
     });
 };
 
