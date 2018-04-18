@@ -2,27 +2,39 @@ import { SET_PLACES, REMOVE_PLACE } from './actionTypes';
 import { uiStartLoading, uiStoptLoading, authGetToken } from './index';
 
 export const addPlace = (placeName, location, image) => (dispatch) => {
+  let authToken;
+
   dispatch(authGetToken())
     .catch(() => {
       alert('No valid token found!');
     })
-    .then(() => {
+    .then((token) => {
+      authToken = token;
       dispatch(uiStartLoading());
       return fetch('https://us-central1-awesome-places-a0a92.cloudfunctions.net/storeImage', {
         method: 'POST',
         body: JSON.stringify({
           image: image.base64,
         }),
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
       });
     })
-    .then((res) => res.json())
+    .catch((err) => {
+      console.log(`Error: ${err}`);
+      alert('Something went wrong, please try again!');
+      dispatch(uiStoptLoading());
+    })
+    .then((res) => console.log('res', res) || res.json())
     .then((parsedRes) => {
       const placeData = {
         name: placeName,
         image: parsedRes.imageUrl,
         location,
       };
-      return fetch('https://awesome-places-a0a92.firebaseio.com/places.json', {
+
+      return fetch(`https://awesome-places-a0a92.firebaseio.com/places.json?auth=${authToken}`, {
         method: 'POST',
         body: JSON.stringify(placeData),
       });
