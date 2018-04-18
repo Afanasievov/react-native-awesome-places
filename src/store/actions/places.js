@@ -1,14 +1,20 @@
 import { SET_PLACES, REMOVE_PLACE } from './actionTypes';
-import { uiStartLoading, uiStoptLoading } from './index';
+import { uiStartLoading, uiStoptLoading, authGetToken } from './index';
 
 export const addPlace = (placeName, location, image) => (dispatch) => {
-  dispatch(uiStartLoading());
-  fetch('https://us-central1-awesome-places-a0a92.cloudfunctions.net/storeImage', {
-    method: 'POST',
-    body: JSON.stringify({
-      image: image.base64,
-    }),
-  })
+  dispatch(authGetToken())
+    .catch(() => {
+      alert('No valid token found!');
+    })
+    .then(() => {
+      dispatch(uiStartLoading());
+      return fetch('https://us-central1-awesome-places-a0a92.cloudfunctions.net/storeImage', {
+        method: 'POST',
+        body: JSON.stringify({
+          image: image.base64,
+        }),
+      });
+    })
     .then((res) => res.json())
     .then((parsedRes) => {
       const placeData = {
@@ -43,7 +49,11 @@ export const setPlaces = (places) => ({
   places,
 });
 export const getPlaces = () => (dispatch) => {
-  fetch('https://awesome-places-a0a92.firebaseio.com/places.json')
+  dispatch(authGetToken())
+    .catch(() => {
+      alert('No valid token found!');
+    })
+    .then((token) => fetch(`https://awesome-places-a0a92.firebaseio.com/places.json?auth=${token}`))
     .then((res) => res.json())
     .then((parsedRes) => {
       const places = [];
@@ -70,10 +80,16 @@ export const removePlace = (key) => ({
 });
 
 export const deletePlace = (key) => (dispatch) => {
-  dispatch(removePlace(key));
-  fetch(`https://awesome-places-a0a92.firebaseio.com/places/${key}.json`, {
-    method: 'DELETE',
-  })
+  dispatch(authGetToken())
+    .catch(() => {
+      alert('No valid token found!');
+    })
+    .then((token) => {
+      dispatch(removePlace(key));
+      return fetch(`https://awesome-places-a0a92.firebaseio.com/places/${key}.json?auth=${token}`, {
+        method: 'DELETE',
+      });
+    })
     .then((res) => res.json())
     .then((parsedRes) => {
       console.log('parsedRes: ', parsedRes);

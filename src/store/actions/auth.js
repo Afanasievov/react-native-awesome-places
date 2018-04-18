@@ -43,3 +43,14 @@ export const tryAuth = (authData, authMode) => (dispatch) => {
       }
     });
 };
+
+export const authGetToken = () => (dispatch, getState) =>
+  new Promise((resolve, reject) => {
+    const { token } = { ...getState().auth };
+
+    if (!token) {
+      reject();
+    } else {
+      resolve(token);
+    }
+  });
