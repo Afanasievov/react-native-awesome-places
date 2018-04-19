@@ -53,8 +53,13 @@ export const tryAuth = (authData, authMode) => (dispatch) => {
     });
 };
 
-export const authGetToken = () => (dispatch, getState) =>
-  new Promise((resolve, reject) => {
+export const authClearStorage = () => () => {
+  AsyncStorage.removeItem('ap:auth.token');
+  AsyncStorage.removeItem('ap:auth.expiryDate');
+};
+
+export const authGetToken = () => (dispatch, getState) => {
+  const promise = new Promise((resolve, reject) => {
     const { token } = { ...getState().auth };
     if (!token) {
       let fetchToken;
@@ -82,6 +87,14 @@ export const authGetToken = () => (dispatch, getState) =>
       resolve(token);
     }
   });
+
+  promise.catch((err) => {
+    console.log('err: ', err);
+    dispatch(authClearStorage());
+  });
+
+  return promise;
+};
 
 export const authAutoSignIn = () => (dispatch) => {
   dispatch(authGetToken())
