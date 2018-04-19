@@ -9,9 +9,11 @@ export const authSetToken = (token) => ({
   token,
 });
 
-const authStoreToken = (token) => (dispatch) => {
+const authStoreToken = (token, expiresIn) => (dispatch) => {
   dispatch(authSetToken(token));
+  const expiryDate = Date.now() + expiresIn * 1000;
   AsyncStorage.setItem('ap:auth:token', token);
+  AsyncStorage.setItem('ap:auth:expiryDate', expiryDate.toString());
 };
 
 export const tryAuth = (authData, authMode) => (dispatch) => {
@@ -45,7 +47,7 @@ export const tryAuth = (authData, authMode) => (dispatch) => {
       if (!parsedRes.idToken) {
         alert('Authentication failed, please try again!');
       } else {
-        dispatch(authStoreToken(parsedRes.idToken));
+        dispatch(authStoreToken(parsedRes.idToken, parsedRes.expiresIn));
         startMainTabs();
       }
     });
@@ -54,17 +56,28 @@ export const tryAuth = (authData, authMode) => (dispatch) => {
 export const authGetToken = () => (dispatch, getState) =>
   new Promise((resolve, reject) => {
     const { token } = { ...getState().auth };
-
     if (!token) {
+      let fetchToken;
+
       AsyncStorage.getItem('ap:auth:token')
         .catch((err) => reject(err))
         .then((tokenFromStorage) => {
           if (!tokenFromStorage) {
             return reject();
           }
-          dispatch(authSetToken(tokenFromStorage));
-          return resolve(tokenFromStorage);
-        });
+          fetchToken = tokenFromStorage;
+          return AsyncStorage.getItem('ap:auth:expiryDate');
+        })
+        .then((expiryDate) => {
+          const parsedExpiryDate = new Date(parseInt(expiryDate, 10));
+          const now = new Date();
+          if (parsedExpiryDate > now) {
+            dispatch(authSetToken(fetchToken));
+            return resolve(fetchToken);
+          }
+          return reject();
+        })
+        .catch((err) => reject(err));
     } else {
       resolve(token);
     }
@@ -75,5 +88,5 @@ export const authAutoSignIn = () => (dispatch) => {
     .then(() => {
       startMainTabs();
     })
-    .catch((err) => console.log(`Error: ${err}`));
+    .catch((err) => console.log(`Error. AutoSignIn ${err}`));
 };
