@@ -1,8 +1,9 @@
 import { AsyncStorage } from 'react-native';
 
-import { AUTH_SET_TOKEN } from './actionTypes';
+import { AUTH_SET_TOKEN, AUTH_REMOVE_TOKEN } from './actionTypes';
 import { uiStartLoading, uiStoptLoading } from './ui';
 import startMainTabs from '../../screens/MainTabs/startMainTabs';
+import App from '../../../App';
 
 export const authSetToken = (token) => ({
   type: AUTH_SET_TOKEN,
@@ -56,8 +57,9 @@ export const tryAuth = (authData, authMode) => (dispatch) => {
 };
 
 export const authClearStorage = () => () => {
-  AsyncStorage.removeItem('ap:auth.token');
-  AsyncStorage.removeItem('ap:auth.expiryDate');
+  AsyncStorage.removeItem('ap:auth:token');
+  AsyncStorage.removeItem('ap:auth:expiryDate');
+  return AsyncStorage.removeItem('ap:auth:refreshToken');
 };
 
 export const authGetToken = () => (dispatch, getState) => {
@@ -132,4 +134,13 @@ export const authAutoSignIn = () => (dispatch) => {
       startMainTabs();
     })
     .catch((err) => console.log(`Error. AutoSignIn ${err}`));
+};
+
+export const authRemoveToken = () => ({
+  type: AUTH_REMOVE_TOKEN,
+});
+
+export const authLogout = () => (dispatch) => {
+  dispatch(authClearStorage()).then(() => App());
+  dispatch(authRemoveToken());
 };
