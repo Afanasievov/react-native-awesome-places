@@ -9,20 +9,22 @@ export const authSetToken = (token) => ({
   token,
 });
 
-const authStoreToken = (token, expiresIn) => (dispatch) => {
+const authStoreToken = (token, expiresIn, refreshToken) => (dispatch) => {
   dispatch(authSetToken(token));
-  const expiryDate = Date.now() + expiresIn * 1000;
+  const expiryDate = Date.now() + 20 * 1000;
   AsyncStorage.setItem('ap:auth:token', token);
   AsyncStorage.setItem('ap:auth:expiryDate', expiryDate.toString());
+  AsyncStorage.setItem('ap:auth:refreshToken', refreshToken);
 };
+
+const API_KEY = 'AIzaSyCkl7rV-ytzH025wy8vPiYZuJzmhhMcrjU';
 
 export const tryAuth = (authData, authMode) => (dispatch) => {
   dispatch(uiStartLoading());
-  const apiKey = 'AIzaSyCkl7rV-ytzH025wy8vPiYZuJzmhhMcrjU';
-  let url = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${apiKey}`;
+  let url = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${API_KEY}`;
 
   if (authMode === 'login') {
-    url = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${apiKey}`;
+    url = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${API_KEY}`;
   }
 
   fetch(url, {
@@ -47,7 +49,7 @@ export const tryAuth = (authData, authMode) => (dispatch) => {
       if (!parsedRes.idToken) {
         alert('Authentication failed, please try again!');
       } else {
-        dispatch(authStoreToken(parsedRes.idToken, parsedRes.expiresIn));
+        dispatch(authStoreToken(parsedRes.idToken, parsedRes.expiresIn, parsedRes.refreshToken));
         startMainTabs();
       }
     });
@@ -88,12 +90,40 @@ export const authGetToken = () => (dispatch, getState) => {
     }
   });
 
-  promise.catch((err) => {
+  // prettier-ignore
+  return promise.catch((err) => {
     console.log('err: ', err);
-    dispatch(authClearStorage());
-  });
+    return AsyncStorage.getItem('ap:auth:refreshToken')
+      .then((refreshToken) =>
+        fetch(`https://securetoken.googleapis.com/v1/token?key=${API_KEY}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: `grant_type=refresh_token&refresh_token=${refreshToken}`,
+        }))
+      .then((res) => res.json())
+      .then((parsedRes) => {
+        if (parsedRes.id_token) {
+          console.log('Refresh token is working!');
+          dispatch(authStoreToken(
+            parsedRes.id_token,
+            parsedRes.expires_in,
+            parsedRes.refresh_token,
+          ));
+          return parsedRes.id_token;
+        }
 
-  return promise;
+        return dispatch(authClearStorage());
+      });
+  })
+    .then((token) => {
+      if (!token) {
+        throw (new Error());
+      }
+
+      return token;
+    });
 };
 
 export const authAutoSignIn = () => (dispatch) => {
