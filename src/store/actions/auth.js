@@ -5,14 +5,15 @@ import { uiStartLoading, uiStoptLoading } from './ui';
 import startMainTabs from '../../screens/MainTabs/startMainTabs';
 import App from '../../../App';
 
-export const authSetToken = (token) => ({
+export const authSetToken = (token, expiryDate) => ({
   type: AUTH_SET_TOKEN,
   token,
+  expiryDate,
 });
 
 const authStoreToken = (token, expiresIn, refreshToken) => (dispatch) => {
-  dispatch(authSetToken(token));
-  const expiryDate = Date.now() + 20 * 1000;
+  const expiryDate = Date.now() + expiresIn * 1000;
+  dispatch(authSetToken(token, expiryDate));
   AsyncStorage.setItem('ap:auth:token', token);
   AsyncStorage.setItem('ap:auth:expiryDate', expiryDate.toString());
   AsyncStorage.setItem('ap:auth:refreshToken', refreshToken);
@@ -64,8 +65,8 @@ export const authClearStorage = () => () => {
 
 export const authGetToken = () => (dispatch, getState) => {
   const promise = new Promise((resolve, reject) => {
-    const { token } = { ...getState().auth };
-    if (!token) {
+    const { token, expiryDateStorage } = { ...getState().auth };
+    if (!token || new Date(expiryDateStorage) <= new Date()) {
       let fetchToken;
 
       AsyncStorage.getItem('ap:auth:token')
