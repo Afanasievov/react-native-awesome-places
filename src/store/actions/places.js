@@ -78,17 +78,19 @@ export const getPlaces = () => (dispatch) => {
     .then((token) => fetch(`https://awesome-places-a0a92.firebaseio.com/places.json?auth=${token}`))
     .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
     .then((parsedRes) => {
-      const places = [];
-      Object.keys(parsedRes).forEach((key) => {
-        places.push({
-          ...parsedRes[key],
-          image: {
-            uri: parsedRes[key].image,
-          },
-          key,
+      if (parsedRes) {
+        const places = [];
+        Object.keys(parsedRes).forEach((key) => {
+          places.push({
+            ...parsedRes[key],
+            image: {
+              uri: parsedRes[key].image,
+            },
+            key,
+          });
         });
-      });
-      dispatch(setPlaces(places));
+        dispatch(setPlaces(places));
+      }
     })
     .catch((err) => {
       alert('Something went wrong, sorry :/');
