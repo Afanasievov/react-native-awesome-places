@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Button, ScrollView, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 
-import { addPlace } from '../../store/actions/index';
+import { addPlace, startAddPlace } from '../../store/actions/index';
 import PlaceInput from '../../components/PlaceInput/PlaceInput';
 import MainText from '../../components/UI/MainText/MainText';
 import HeadingText from '../../components/UI/HeadingText/HeadingText';
@@ -43,18 +43,22 @@ class SharePlaceScreen extends Component {
       },
     });
 
-  componentDidUpdate() {
-    if (this.props.placeAdded) {
-      this.props.navigator.switchToTab({ tabIndex: 0 });
-      // this.props.onStartAddPlace();
-    }
-  }
-
   componentWillMount() {
     this.reset();
   }
 
+  componentDidUpdate() {
+    if (this.props.placeAdded) {
+      this.props.navigator.switchToTab({ tabIndex: 0 });
+      // this.props.onAddPlace()
+    }
+  }
   onNavigatorEvent = (event) => {
+    if (event.type === 'ScreenChangedEvent') {
+      if (event.id === 'willAppear') {
+        this.props.onStartAddPlace();
+      }
+    }
     if (event.type === 'NavBarButtonPress') {
       if (event.id === 'sideDrawerToggle') {
         this.props.navigator.toggleDrawer({
@@ -160,10 +164,12 @@ class SharePlaceScreen extends Component {
 
 const mapStateToProps = (state) => ({
   isLoading: state.ui.isLoading,
+  placeAdded: state.places.placeAdded,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onAddPlace: (placeName, location, image) => dispatch(addPlace(placeName, location, image)),
+  onStartAddPlace: () => dispatch(startAddPlace()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SharePlaceScreen);
