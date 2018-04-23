@@ -30,11 +30,11 @@ export const addPlace = (placeName, location, image) => (dispatch) => {
       });
     })
     .catch((err) => {
-      console.log(`Error: ${err}`);
+      console.log(`Erro r: ${err}`);
       alert('Something went wrong, please try again!');
       dispatch(uiStoptLoading());
     })
-    .then((res) => console.log('res', res) || res.json())
+    .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
     .then((parsedRes) => {
       const placeData = {
         name: placeName,
@@ -52,7 +52,7 @@ export const addPlace = (placeName, location, image) => (dispatch) => {
       alert('Something went wrong, please try again!');
       dispatch(uiStoptLoading());
     })
-    .then((res) => res.json())
+    .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
     .then((parsedRes) => {
       console.log('parsedRes: ', parsedRes);
       dispatch(uiStoptLoading());
@@ -76,7 +76,7 @@ export const getPlaces = () => (dispatch) => {
       alert('No valid token found!');
     })
     .then((token) => fetch(`https://awesome-places-a0a92.firebaseio.com/places.json?auth=${token}`))
-    .then((res) => res.json())
+    .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
     .then((parsedRes) => {
       const places = [];
       Object.keys(parsedRes).forEach((key) => {
@@ -112,7 +112,7 @@ export const deletePlace = (key) => (dispatch) => {
         method: 'DELETE',
       });
     })
-    .then((res) => res.json())
+    .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
     .then((parsedRes) => {
       console.log('parsedRes: ', parsedRes);
       console.log('Done!');

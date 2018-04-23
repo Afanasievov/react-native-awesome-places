@@ -45,7 +45,7 @@ export const tryAuth = (authData, authMode) => (dispatch) => {
       alert('Authentication failed, please try again!');
       dispatch(uiStoptLoading());
     })
-    .then((res) => res.json())
+    .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
     .then((parsedRes) => {
       dispatch(uiStoptLoading());
       if (!parsedRes.idToken) {
@@ -105,7 +105,7 @@ export const authGetToken = () => (dispatch, getState) => {
           },
           body: `grant_type=refresh_token&refresh_token=${refreshToken}`,
         }))
-      .then((res) => res.json())
+      .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
       .then((parsedRes) => {
         if (parsedRes.id_token) {
           dispatch(authStoreToken(
