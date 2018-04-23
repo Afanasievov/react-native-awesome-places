@@ -108,7 +108,6 @@ export const authGetToken = () => (dispatch, getState) => {
       .then((res) => res.json())
       .then((parsedRes) => {
         if (parsedRes.id_token) {
-          console.log('Refresh token is working!');
           dispatch(authStoreToken(
             parsedRes.id_token,
             parsedRes.expires_in,

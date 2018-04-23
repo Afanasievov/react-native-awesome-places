@@ -5,10 +5,14 @@ import ImagePicker from 'react-native-image-picker';
 import styles from './PickImage.styles';
 
 class PickImage extends Component {
-  state = {
-    pickedImage: null,
-  };
+  reset = () =>
+    this.setState({
+      pickedImage: null,
+    });
 
+  componentWillMount() {
+    this.reset();
+  }
   pickImageHandler = () => {
     ImagePicker.showImagePicker(
       { title: 'Pick an Image', maxWidth: 500, maxHeight: 500 },
