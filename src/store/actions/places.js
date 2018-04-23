@@ -39,6 +39,7 @@ export const addPlace = (placeName, location, image) => (dispatch) => {
       const placeData = {
         name: placeName,
         image: parsedRes.imageUrl,
+        imagePath: parsedRes.imagePath,
         location,
       };
 
