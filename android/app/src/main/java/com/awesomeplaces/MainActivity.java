@@ -1,4 +1,4 @@
-package com.v6;
+package com.awesomeplaces;
 
 import android.widget.LinearLayout;
 import android.graphics.Color;

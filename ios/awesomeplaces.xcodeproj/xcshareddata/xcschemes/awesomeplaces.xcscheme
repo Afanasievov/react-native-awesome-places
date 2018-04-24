@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "v6.app"
-               BlueprintName = "v6"
-               ReferencedContainer = "container:v6.xcodeproj">
+               BuildableName = "awesomeplaces.app"
+               BlueprintName = "awesomeplaces"
+               ReferencedContainer = "container:awesomeplaces.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "v6Tests.xctest"
-               BlueprintName = "v6Tests"
-               ReferencedContainer = "container:v6.xcodeproj">
+               BuildableName = "awesomeplacesTests.xctest"
+               BlueprintName = "awesomeplacesTests"
+               ReferencedContainer = "container:awesomeplaces.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -61,9 +61,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "v6Tests.xctest"
-               BlueprintName = "v6Tests"
-               ReferencedContainer = "container:v6.xcodeproj">
+               BuildableName = "awesomeplacesTests.xctest"
+               BlueprintName = "awesomeplacesTests"
+               ReferencedContainer = "container:awesomeplaces.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -71,9 +71,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "v6.app"
-            BlueprintName = "v6"
-            ReferencedContainer = "container:v6.xcodeproj">
+            BuildableName = "awesomeplaces.app"
+            BlueprintName = "awesomeplaces"
+            ReferencedContainer = "container:awesomeplaces.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -94,9 +94,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "v6.app"
-            BlueprintName = "v6"
-            ReferencedContainer = "container:v6.xcodeproj">
+            BuildableName = "awesomeplaces.app"
+            BlueprintName = "awesomeplaces"
+            ReferencedContainer = "container:awesomeplaces.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -113,9 +113,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "v6.app"
-            BlueprintName = "v6"
-            ReferencedContainer = "container:v6.xcodeproj">
+            BuildableName = "awesomeplaces.app"
+            BlueprintName = "awesomeplaces"
+            ReferencedContainer = "container:awesomeplaces.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
