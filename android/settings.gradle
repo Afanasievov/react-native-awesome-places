@@ -1,4 +1,4 @@
-rootProject.name = 'Awesome Places'
+rootProject.name = 'Awesome_Places'
 
 include ':app'
 
