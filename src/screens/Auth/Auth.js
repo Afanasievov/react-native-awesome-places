@@ -18,6 +18,7 @@ import backgroundImage from '../../assets/Background.jpg';
 import styles from './Auth.styles';
 import validate from '../../utility/validation';
 import { tryAuth, authAutoSignIn } from '../../store/actions';
+import { BG_BUTTON_PRIMARY } from '../../constants/values';
 
 class AuthScreen extends Component {
   state = {
@@ -124,13 +125,12 @@ class AuthScreen extends Component {
       },
     }));
   };
-
   render() {
     let headingText = null;
     let confirmPasswordControl = null;
     let submitButton = (
       <ButtonWithBackground
-        color="#29aaf4"
+        color={BG_BUTTON_PRIMARY}
         onPress={this.authHandler}
         disabled={
           (!this.state.controls.confirmPassword.valid && this.state.authMode === 'signup') ||
@@ -177,7 +177,7 @@ class AuthScreen extends Component {
       <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
         <KeyboardAvoidingView style={styles.container} behavior="padding">
           {headingText}
-          <ButtonWithBackground color="#29aaf4" onPress={this.switchAuthModeHandler}>
+          <ButtonWithBackground color={BG_BUTTON_PRIMARY} onPress={this.switchAuthModeHandler}>
             Switch to {this.state.authMode === 'login' ? 'Sign Up' : 'Login'}
           </ButtonWithBackground>
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

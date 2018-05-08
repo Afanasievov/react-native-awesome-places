@@ -1,9 +1,12 @@
 import { AsyncStorage } from 'react-native';
 
-import { AUTH_SET_TOKEN, AUTH_REMOVE_TOKEN } from './actionTypes';
+import App from '../../../App';
 import { uiStartLoading, uiStoptLoading } from './ui';
 import startMainTabs from '../../screens/MainTabs/startMainTabs';
-import App from '../../../App';
+import triggerNotification from '../../utility/triggerNotification';
+import { AUTH_SET_TOKEN, AUTH_REMOVE_TOKEN } from './actionTypes';
+import { HEADING_ERROR, AUTHENTICATION_FAILED } from '../../constants/messages';
+import { NOTIFICATION_TYPE_ERROR } from '../../constants/values';
 
 export const authSetToken = (token, expiryDate) => ({
   type: AUTH_SET_TOKEN,
@@ -40,20 +43,22 @@ export const tryAuth = (authData, authMode) => (dispatch) => {
       'Content-Type': 'application/json',
     },
   })
-    .catch((err) => {
-      console.log(`Error: ${err}`);
-      alert('Authentication failed, please try again!');
-      dispatch(uiStoptLoading());
-    })
-    .then((res) => (res.ok ? res.json() : Promise.reject(res.statusText)))
+    .then((res) => (res.ok ? res.json() : Promise.reject(res)))
     .then((parsedRes) => {
       dispatch(uiStoptLoading());
       if (!parsedRes.idToken) {
-        alert('Authentication failed, please try again!');
-      } else {
-        dispatch(authStoreToken(parsedRes.idToken, parsedRes.expiresIn, parsedRes.refreshToken));
-        startMainTabs();
+        return Promise.reject(new Error(AUTHENTICATION_FAILED));
       }
+      dispatch(authStoreToken(parsedRes.idToken, parsedRes.expiresIn, parsedRes.refreshToken));
+      return startMainTabs();
+    })
+    .catch((err) => {
+      dispatch(uiStoptLoading());
+      return triggerNotification({
+        type: NOTIFICATION_TYPE_ERROR,
+        heading: HEADING_ERROR,
+        message: err.message || err.statusText,
+      });
     });
 };
 
@@ -94,9 +99,8 @@ export const authGetToken = () => (dispatch, getState) => {
   });
 
   // prettier-ignore
-  return promise.catch((err) => {
-    console.log('err: ', err);
-    return AsyncStorage.getItem('ap:auth:refreshToken')
+  return promise.catch(() =>
+    AsyncStorage.getItem('ap:auth:refreshToken')
       .then((refreshToken) =>
         fetch(`https://securetoken.googleapis.com/v1/token?key=${API_KEY}`, {
           method: 'POST',
@@ -117,8 +121,7 @@ export const authGetToken = () => (dispatch, getState) => {
         }
 
         return dispatch(authClearStorage());
-      });
-  })
+      }))
     .then((token) => {
       if (!token) {
         throw (new Error());

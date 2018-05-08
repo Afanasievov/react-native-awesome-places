@@ -44,7 +44,6 @@ class PickLocation extends Component {
   getLocationHandler = () => {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        console.log('pos: ', pos);
         const coordsEvent = {
           nativeEvent: {
             coordinate: {
@@ -53,7 +52,6 @@ class PickLocation extends Component {
             },
           },
         };
-        console.log('coordsEvent: ', coordsEvent);
         this.pickLocationHandler(coordsEvent);
       },
       (err) => {
